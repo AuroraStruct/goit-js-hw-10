@@ -1,5 +1,7 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 const startBtn = document.querySelector('[data-start]');
 
@@ -14,9 +16,13 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     const selected = selectedDates[0];
+    const now = new Date();
 
-    if (selected < new Date()) {
-      window.alert('Please choose a date in the future');
+    if (selected <= now) {
+      iziToast.error({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+      });
       startBtn.disabled = true;
     } else {
       userSelectedDate = selected;
@@ -26,6 +32,7 @@ const options = {
 };
 
 flatpickr('#datetime-picker', options);
+
 function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
